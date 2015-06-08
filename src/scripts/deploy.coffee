@@ -98,6 +98,8 @@ module.exports = (robot) ->
   #
   # Actually dispatch deployment requests to GitHub
   robot.respond DeployPattern, id: "hubot-deploy.create", hubotDeployAuthenticate: true, (msg) ->
+    msg.send msg.random ["It won't work", "Just that? I won't enjoy it", "Here I am, brain size of a planet and they ask me to deploy code. Call that job satisfaction?"]
+
     task  = msg.match[1].replace(DeployPrefix, "deploy")
     force = msg.match[2] == '!'
     name  = msg.match[3]
@@ -177,7 +179,7 @@ module.exports = (robot) ->
         else
           msg.reply "#{app} #{env} is already reserved to #{username}, do you really believe my brain could forget that?"
       else
-        msg.send "I'm sorry but #{app} #{env} is already reserved for #{reservations[app][env]}."
+        msg.send "I'm sorry but #{app} #{env} is already reserved for #{reservations[app][env]}. Wait another 10 million years."
 
     else
       reservations[app][env] = username
