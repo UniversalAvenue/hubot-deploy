@@ -78,7 +78,7 @@ module.exports = (robot) ->
       if robot.adapterName is "hipchat"
         if msg.envelope.user.reply_to?
           deployment.room = msg.envelope.user.reply_to
-          
+
       if robot.adapterName is "slack"
         deployment.user = user.name
         deployment.room = robot.adapter.client.rtm.dataStore.getChannelGroupOrDMById(msg.message.user.room).name
