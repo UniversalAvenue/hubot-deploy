@@ -33,6 +33,21 @@ DEPLOYS_SYNTAX = ///
   #{validSlug})?                  # Environment to release to
 ///i
 
+RESERVE_SYNTAX = ///
+  (?:reserve|lock)\s+             # action keyword
+  #{validSlug}                   # application name
+  (?:\s+#{validSlug})?           # environment name
+  (?:\s+for\s+(me))?\s*$          # user to reserve for
+///i
+
+FREE_SYNTAX = ///
+  (?:free|unlock)\s+              # action keyword
+  #{validSlug}                   # application name
+  (?:\s+#{validSlug})?\s*$       # environment name
+///i
+
 exports.DeployPrefix   = scriptPrefix
 exports.DeployPattern  = DEPLOY_SYNTAX
 exports.DeploysPattern = DEPLOYS_SYNTAX
+exports.ReservePattern = RESERVE_SYNTAX
+exports.FreePattern    = FREE_SYNTAX
