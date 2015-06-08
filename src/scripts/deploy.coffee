@@ -69,6 +69,12 @@ module.exports = (robot) ->
 
     deployment = new Deployment(name, ref, task, env, force, hosts)
 
+    reservations = robot.brain.get('reservations') || {}
+    reservations[app] ||= {}
+    if reservations[name][env] && reservations[name][env] != msg.envelope.user.name
+      msg.reply "Sorry I can't do that, right now only #{reservations[name][env]} can deploy here."
+      return
+
     unless deployment.isValidApp()
       msg.reply "#{name}? Never heard of it."
       return
@@ -95,6 +101,51 @@ module.exports = (robot) ->
 
     deployment.post (responseMessage) ->
       msg.reply responseMessage if responseMessage?
+
+  ###########################################################################
+  # reserve/lock <app> <env>(defaults to staging) for <user>(slack name, me for the current user, defaults to me)
+  #
+  # Lets only the specified user deploy to that app/env
+  robot.respond ReservePattern, (msg) ->
+    app = msg.match[1]
+    env = (msg.match[2] || 'staging')
+    user = (msg.match[3] || 'me')
+    username = user
+    if user == 'me'
+      username = msg.envelope.user.name
+
+    reservations = robot.brain.get('reservations') || {}
+    reservations[app] ||= {}
+
+    if reservations[app][env]
+      if reservations[app][env] == username
+        if user == 'me'
+          msg.reply "You already reserved #{app} #{env}, do you really believe my brain could forget that?"
+        else
+          msg.reply "#{app} #{env} is already reserved to #{username}, do you really believe my brain could forget that?"
+      else
+        msg.send "I'm sorry but #{app} #{env} is already reserved for #{reservations[app][env]}."
+
+    else
+      reservations[app][env] = username
+      robot.brain.set('reservations', reservations)
+      msg.send "I will prevent everybody else from deploying to #{app} #{env} which means that probably people will blame me if #{if user == 'me' then 'you' else username} will break something."
+
+
+  ###########################################################################
+  # free/unlock <app> <env>(defaults to staging)
+  #
+  # Removes any dpeloyment reservations
+  robot.respond ReservePattern, (msg) ->
+    app = msg.match[1]
+    env = (msg.match[2] || 'staging')
+
+    reservations = robot.brain.get('reservations') || {}
+    reservations[app] ||= {}
+    delete reservations[app][env]
+    robot.brain.set('reservations', reservations)
+    msg.send "#{app} #{env} is now again free for deploys from everybody - I'm sure you will brake it."
+
 
   ###########################################################################
   # deploy:version
