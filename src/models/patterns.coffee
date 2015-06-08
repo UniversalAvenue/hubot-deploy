@@ -37,7 +37,7 @@ RESERVE_SYNTAX = ///
   (?:reserve|lock)\s+             # action keyword
   #{validSlug}                   # application name
   (?:\s+#{validSlug})?           # environment name
-  (?:\s+for\s+([^\s]+))?\s*$      # user to reserve for
+  (?:\s+(?:for|to)\s+([^\s]+))?\s*$ # user to reserve for
 ///i
 
 FREE_SYNTAX = ///
