@@ -70,7 +70,7 @@ module.exports = (robot) ->
     deployment = new Deployment(name, ref, task, env, force, hosts)
 
     reservations = robot.brain.get('reservations') || {}
-    reservations[app] ||= {}
+    reservations[name] ||= {}
     if reservations[name][env] && reservations[name][env] != msg.envelope.user.name
       msg.reply "Sorry I can't do that, right now only #{reservations[name][env]} can deploy here."
       return
@@ -106,7 +106,7 @@ module.exports = (robot) ->
   # reserve/lock <app> <env>(defaults to staging) for <user>(slack name, me for the current user, defaults to me)
   #
   # Lets only the specified user deploy to that app/env
-  robot.respond ReservePattern, (msg) ->
+  robot.respond Patterns.ReservePattern, (msg) ->
     app = msg.match[1]
     env = (msg.match[2] || 'staging')
     user = (msg.match[3] || 'me')
@@ -136,7 +136,7 @@ module.exports = (robot) ->
   # free/unlock <app> <env>(defaults to staging)
   #
   # Removes any dpeloyment reservations
-  robot.respond ReservePattern, (msg) ->
+  robot.respond Patterns.FreePattern, (msg) ->
     app = msg.match[1]
     env = (msg.match[2] || 'staging')
 
