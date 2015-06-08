@@ -63,7 +63,7 @@ module.exports = (robot) ->
     task  = msg.match[1].replace(DeployPrefix, "deploy")
     force = msg.match[2] == '!'
     name  = msg.match[3]
-    ref   = (msg.match[4]||'master')
+    ref   = msg.match[4]
     env   = (msg.match[5]||'production')
     hosts = (msg.match[6]||'')
 
