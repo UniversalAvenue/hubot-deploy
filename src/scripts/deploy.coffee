@@ -6,6 +6,8 @@
 #   hubot deploy:version - show the script version and node/environment info
 #   hubot deploy <app>/<branch> to <env>/<roles> - deploys <app>'s <branch> to the <env> environment's <roles> servers
 #   hubot deploys <app>/<branch> in <env> - Displays recent deployments for <app>'s <branch> in the <env> environment
+#   hubot reserve/lock <app> <env>(defaults to staging) for/to <user>(slack name, me for the current user, defaults to me) - Lets only <user> deploy to <app>/<env>
+#   hubot free/unlock <app> <env>(defaults to staging) - Removes any dpeloyment reservations on <app>/<env>
 #
 supported_tasks = [ DeployPrefix ]
 
@@ -105,7 +107,7 @@ module.exports = (robot) ->
   ###########################################################################
   # reserve/lock <app> <env>(defaults to staging) for <user>(slack name, me for the current user, defaults to me)
   #
-  # Lets only the specified user deploy to that app/env
+  # Lets only the specified user deploy to app/env
   robot.respond Patterns.ReservePattern, (msg) ->
     app = msg.match[1]
     env = (msg.match[2] || 'staging')
@@ -135,7 +137,7 @@ module.exports = (robot) ->
   ###########################################################################
   # free/unlock <app> <env>(defaults to staging)
   #
-  # Removes any dpeloyment reservations
+  # Removes any dpeloyment reservations for app/env
   robot.respond Patterns.FreePattern, (msg) ->
     app = msg.match[1]
     env = (msg.match[2] || 'staging')
