@@ -152,7 +152,8 @@ class Deployment
             failedContexts.push(context) for context in requiredContexts when context not in namedContexts
 
           bodyMessage = """
-          Unmet required commit status contexts for #{name}: #{failedContexts.join(',')} failed.
+          Your code is broken and looks even more sorry than me\n
+          (Unmet required commit status contexts for #{name}: #{failedContexts.join(',')} failed)
           """
 
         if bodyMessage == "Not Found"

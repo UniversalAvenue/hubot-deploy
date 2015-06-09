@@ -113,7 +113,7 @@ module.exports = (robot) ->
     reservations = robot.brain.get('reservations') || {}
     reservations[name] ||= {}
     if reservations[name][env] && reservations[name][env] != msg.envelope.user.name
-      msg.reply "Sorry I can't do that, right now only #{reservations[name][env]} can deploy here."
+      msg.send "I'm sorry, #{msg.envelope.user.name}, I can't do that. (Right now only #{reservations[name][env]} can deploy here)"
       return
 
     unless deployment.isValidApp()
