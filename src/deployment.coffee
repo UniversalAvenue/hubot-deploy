@@ -130,7 +130,7 @@ class Deployment
           if requiredContexts?
             failedContexts.push(context) for context in requiredContexts when context not in namedContexts
 
-          bodyMessage = "Unmet required commit status contexts for #{name}: #{failedContexts.join(',')} failed."
+          bodyMessage = "Your code is broken and looks even more sorry than me\n(Unmet required commit status contexts for #{name}: #{failedContexts.join(',')} failed)"
 
         if bodyMessage == "Not Found"
           message = "Unable to create deployments for #{repository}. Check your scopes for this token."
@@ -138,7 +138,7 @@ class Deployment
           message = bodyMessage
 
       if success and not message
-        message = "Deployment of #{name}/#{ref} to #{env} created"
+        message = "My enormous brain will now process this deployment of #{name}/#{ref} to #{env} - This can only go wrong"
 
       cb message
 
