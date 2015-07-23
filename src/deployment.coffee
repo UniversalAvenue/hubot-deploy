@@ -126,11 +126,15 @@ class Deployment
           commitContexts = errors.contexts
 
           namedContexts  = (context.context for context in commitContexts)
-          failedContexts = (context.context for context in commitContexts when context.state isnt 'success')
+          failedContexts = (context.context for context in commitContexts when context.state == 'error' || context.state == 'failure')
+          pendingContexts = (context.context for context in commitContexts when context.state == 'pending')
           if requiredContexts?
             failedContexts.push(context) for context in requiredContexts when context not in namedContexts
 
-          bodyMessage = "Your code is broken and looks even more sorry than me\n(Unmet required commit status contexts for #{name}: #{failedContexts.join(',')} failed)"
+          if failedContexts?
+            bodyMessage = "BUILD FAILED\nYour code is broken and looks even more sorry than me"
+          else if pendingContexts?
+            bodyMessage = "BUILD PENDING\nI'm afraid I can't do this (yet)"
 
         if bodyMessage == "Not Found"
           message = "Unable to create deployments for #{repository}. Check your scopes for this token."
@@ -138,7 +142,7 @@ class Deployment
           message = bodyMessage
 
       if success and not message
-        message = "My enormous brain will now process this deployment of #{name}/#{ref} to #{env} - This can only go wrong"
+        message = "DEPLOY STARTED\nMy enormous brain will now process this deployment of #{name}/#{ref} to #{env} - This can only go wrong"
 
       cb message
 
