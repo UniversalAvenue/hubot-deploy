@@ -60,8 +60,6 @@ module.exports = (robot) ->
   #
   # Actually dispatch deployment requests to GitHub
   robot.respond DeployPattern, (msg) ->
-    msg.send msg.random ["It won't work", "Just that? I won't enjoy it", "Here I am, brain size of a planet and they ask me to deploy code. Call that job satisfaction?"]
-
     task  = msg.match[1].replace(DeployPrefix, "deploy")
     force = msg.match[2] == '!'
     name  = msg.match[3]
@@ -105,6 +103,7 @@ module.exports = (robot) ->
 
     deployment.post (responseMessage) ->
       msg.reply responseMessage if responseMessage?
+      msg.send msg.random ["It won't work", "Just that? I won't enjoy it", "Here I am, brain size of a planet and they ask me to deploy code. Call that job satisfaction?"]
 
   ###########################################################################
   # reserve/lock <app> <env>(defaults to staging) for <user>(slack name, me for the current user, defaults to me)
