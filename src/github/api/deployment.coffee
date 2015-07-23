@@ -145,16 +145,22 @@ class Deployment
         if bodyMessage.match(/Conflict: Commit status checks/)
           errors = data['errors'][0]
           commitContexts = errors.contexts
-
-          namedContexts  = (context.context for context in commitContexts )
-          failedContexts = (context.context for context in commitContexts when context.state isnt 'success')
+          namedContexts  = (context.context for context in commitContexts)
+          failedContexts = (context.context for context in commitContexts when context.state == 'error' || context.state == 'failure')
+          pendingContexts = (context.context for context in commitContexts when context.state == 'pending')
           if requiredContexts?
             failedContexts.push(context) for context in requiredContexts when context not in namedContexts
 
-          bodyMessage = """
-          Your code is broken and looks even more sorry than me\n
-          (Unmet required commit status contexts for #{name}: #{failedContexts.join(',')} failed)
-          """
+          if failedContexts?
+            bodyMessage = """
+            BUILD FAILED\n
+            Your code is broken and looks even more sorry than me
+            """
+          else if pendingContexts?
+            bodyMessage = """
+            BUILD PENDING\n
+            I'm afraid I can't do this (yet)
+            """
 
         if bodyMessage == "Not Found"
           message = "Unable to create deployments for #{repository}. Check your scopes for this token."
