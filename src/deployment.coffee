@@ -155,6 +155,9 @@ class Deployment
     @env = 'production' if @env == 'prod'
     @ref ||= (@application['default_deploy_branch'] || 'master')
 
+    if @env == 'staging'
+      @force = true
+
   configureAutoMerge: ->
     if @application['auto_merge']?
       @autoMerge = @application['auto_merge']
