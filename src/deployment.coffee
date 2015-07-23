@@ -134,7 +134,7 @@ class Deployment
           if failedContexts?
             bodyMessage = "BUILD FAILED\nYour code is broken and looks even more sorry than me"
           else if pendingContexts?
-            bodyMessage = "BUILD PENDING\nI'm afraid I can't do this (yet)"
+            bodyMessage = "BUILD PENDING\nI'm afraid #{@user} I can't do this (yet)"
 
         if bodyMessage == "Not Found"
           message = "Unable to create deployments for #{repository}. Check your scopes for this token."
