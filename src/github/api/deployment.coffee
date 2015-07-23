@@ -159,7 +159,7 @@ class Deployment
           else if pendingContexts?
             bodyMessage = """
             BUILD PENDING\n
-            I'm afraid I can't do this (yet)
+            I'm afraid #{@user} I can't do this (yet)
             """
 
         if bodyMessage == "Not Found"
