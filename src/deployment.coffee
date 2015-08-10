@@ -142,7 +142,7 @@ class Deployment
           message = bodyMessage
 
       if success and not message
-        message = "DEPLOY STARTED\nMy enormous brain will now process this deployment of #{name}/#{ref} to #{env} - This can only go wrong"
+        message = "DEPLOY STARTED"
 
       cb message
 
