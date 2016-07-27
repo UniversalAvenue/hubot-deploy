@@ -28,9 +28,9 @@ class Deployment
     if @application?
       @repository = @application['repository']
 
+      @configureEnvironments()
       @configureAutoMerge()
       @configureRequiredContexts()
-      @configureEnvironments()
 
       @allowedRooms = @application['allowed_rooms']
 
@@ -42,6 +42,12 @@ class Deployment
 
   isAllowedRoom: (room) ->
     !@allowedRooms? || room in @allowedRooms
+
+  isBranchAllowedForEnv: ->
+    @env != 'production' || @ref == (@application['default_deploy_branch'] || 'master')
+
+  isForceAllowedForEnv: ->
+    @env != 'production' || !@force
 
   # Retrieves a fully constructed request body and removes sensitive config info
   # A hash to be converted into the body of the post to create a GitHub Deployment

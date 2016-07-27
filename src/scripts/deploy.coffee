@@ -86,6 +86,12 @@ module.exports = (robot) ->
     unless deployment.isAllowedRoom(msg.message.user.room)
       msg.reply "#{name} is not allowed to be deployed from this room."
       return
+    unless deployment.isBranchAllowedForEnv()
+      msg.reply "No deploying #{deployment.ref} to #{deployment.env}"
+      return
+    unless deployment.isForceAllowedForEnv()
+      msg.reply "No force deploying to #{deployment.env}"
+      return
 
     user = robot.brain.userForId msg.envelope.user.id
     if user? and user.githubDeployToken?
